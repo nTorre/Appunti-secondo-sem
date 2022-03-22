@@ -9,7 +9,7 @@
 - password: Kolmogorov2021
 - [pdf]("http://datascience.maths.unitn.it/~claudio/teaching/ps/2021/probabilita-dispensa.pdf")
 
-#### Easme
+#### Esame
 - 1h e 30min
 - 10 domande a risposta multipla sulla parte di teoria
 - 3 esercizi
@@ -442,3 +442,38 @@ S = {$a_1, a_2, a_3$} n=3, r=2
 (a1, a1)...(a3,a3)
 
 $D_{3,2} = 3^2 = 9$
+
+#### Calcolo combinatorio
+Dato un insieme S={$a_1$, $a_2$, ...,$a_n$} di oggetti distinti un allineamento è una regola. Due allineamenti sono cosiderati diversi se:
+1. perché contengono elementi diversi
+2. perché gli oggetti compaiono in ordine diverso
+3. perchè gli oggetti si ripetono un numero diverso di volte.
+
+Disposizioni con ripetizione $D_{n,r}^* = n^r$
+
+Esempio S={a1,a2,a} n=3 r=2<br>
+(a1,a1),(a1,a2),...,(a3,a3)
+
+###### Disposizioni senza ripetizioni
+(1) e (2) ma un elemento compare al più una volta.<br>
+$D_{n,r} = n(n-1)...(n-r+1)$
+
+Esempio S={a1,a2,a} n=3 r=2<br>
+(a1,a1),(a1,a2),...,(a3,a3)<br>
+e togliere gli elementi che compaiono più volte.
+
+$D_{3,2} = 3\times 2 = 6$
+
+###### Permutazioni
+Caso in cui r=n
+
+###### Combinazioni
+(1) ma l'ordine non è importante e un elemento può comparire al più una volta
+
+$C_{n,r} = \frac{D_{n,r}}{P_r} = \frac{D_{n,r}}{r!} = \frac{n!}{(n-r)!r!}$
+
+
+#### Esercizi giornalieri
+- Registrarsi
+- Giovedì 24/03 e Venerd 25/03 ci sono due esercizi di prova. (non valgono).
+- Ricordarsi che le risposte devono essere date in formato R (decimali col . tutto qua)

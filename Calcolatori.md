@@ -311,4 +311,101 @@ Utile per implementare array con elementi di dimensione > 1
 
 
 Application Binary Interface (ABI): insieme di convenzioni software
-che dicono come usare i registris
+che dicono come usare i registri
+
+#### Instruction set
+Insieme di istruzioni che il processore ci mette a disposizione. Un processore ne ha almeno una. Possono essere RISC E CISC. L'idea di IS proviene da Von Neumann. Egli pensò che alcuni comandi possono controllare lo stato dell'hardware (modificare lo stato, ovvero programmarlo).
+
+## RISC-V
+Già Von Neumann disse che all'interno di un processore ci devono essere operatori fondamentali algebrici.
+
+Le istruzioni sono regolari. Ad esempio: <br>
+a = b+c, diventa `add a,b,c`
+
+Somma:
+```c
+a = b+c+d+e
+```
+
+In RISC-V si spezzettano le operazioni
+```RISCV
+add a,b,c
+add a,a,d
+add a,a,e
+```
+
+Sottrazione:
+```RISCV
+sub a,b,c   #quesa corrispone a a=b-c
+```
+
+Ci sono Assembly dove i commenti si fanno in stile c (/* */) e il risultato di un'operazione si immagazzina nel terzo valore passato.
+
+Gli operandi (argomenti e destinazione), sono in realtà registri. <br>
+RISC-V dispone di 32 registri da 64 bit.
+
+La quantità di registri determina la lunghezza minima di un ciclo di clock.
+
+L'istruzione `f = (g+h) - (i+j)` diventa:
+```RISCV
+add x5, x20, x21  # Il registro temporaneo# x5 viene settato alla
+                  # somma dei registri:
+                  # x20+x21 (g+h)
+add x6, x22, x23  # Idem, x6 conterrà la
+                  # somma x22+x23 (i+j)
+sub x19, x5, x6   # f = x5 – x6
+```
+
+Tuttavia non sempre i registri bastano. E' necessario salvare informazioni in memoria.
+
+##### La memoria
+La memoria è una sequenza di bit organizzati in gruppi di 8 bit (1 byte). Ogni volta che salvo il valore di un registro in memoria trasferisco 64 bit (grandezza registri RISC-V). La maggior parte delle architetture non permette di leggere il singolo byte (singola cella), ma prendo l'intero valore (64 bit = 8 celle). Gli indirizzi saranno 0, 8, 16, ... <br>
+Nell’assemblatore RISC-V l’indirizzo si specifica tramite una base (in un registro) e uno spiazzamento o offset (costante).
+
+```RISCV
+ld x9, 8(x22)     #Load Double (64 bit alla volta)
+```
+
+L’effetto di questa istruzione è di caricare in *x9* la parola doppia all’indirizzo dato da *x22* + 8
+
+###### Istruzione leggermente più complessa
+La seguente istruzione in c
+```c
+A[12] = h + A[8]
+```
+
+Diventa:
+```RISCV
+ld x9, 64(x22)      # il puntatore di A è in x22
+                    # e l’ottava parola doppia
+                    # comincia all’indirizzo
+                    # x22 + 8*8
+add x9, x21, x9     # h è in x21
+sd x9, 96(x22)      # memorizzo il contenuto
+                    # del registro x9 in A[12],
+                    # ovvero all’indirizzo
+                    # x22 + 12*8
+```
+
+###### Register spilling
+Automaticamente il compilatore quando compila codice di alto livello, se ci sono più variabili che registri, vengono salvati in memoria e io valori recuperati quando necessario.
+
+###### I registri
+x0 è fisso a 0. In sola lettura.
+
+##### Shift logico
+
+Consideriamo per prima cosa lo shift logico a sinistra. L’idea è di inserire degli zeri nella posizione meno significativa e traslare tutto a sinistra perdendo (nel caso di overflow) i bit più significativi <br>
+Ad esempio, supponiamo che x19 contenga il valore 9:
+```
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 00001001
+```
+
+```RISCV
+slli x11, x19, 4    # shift logical left immediate
+```
+```
+00000000 00000000 00000000 00000000 00000000 00000000 00000000 10010000  
+```
+
+L’effetto è di memorizzare in x11 valore 9*2^4=144

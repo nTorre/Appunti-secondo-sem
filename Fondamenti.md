@@ -319,13 +319,13 @@ Allora P(n) è vera $\forall$ n $\geq$ h
 #### Appello 11 febbraio 2016
 Si mostri per induzione su n $\geq$ 1 la seguente uguaglianza
 $$
-\sum_{k=1} ^ n \frac {k}{2^k} = 2 -\frac{n+2}{2^n}
+\sum_{k=1} ^ n \frac {k}{2^k} = 2 -\frac{n+2}{2^n} \:\:\: \forall n \geq 1
 $$
 
 ###### Prima soluzione, versione estesa
-Sia h=1 e per ogni n $\geq$ di h P(n):=$(\sum^n_{k=1} n \frac {k}{2^k} = 2 -\frac{n+2}{2^n})$
+Sia h=1 e per ogni n $\geq$ h sia P(n) la seguente affermazione P(n):=$(\sum^n_{k=1} \frac {k}{2^k} = 2 -\frac{n+2}{2^n})$
 
-Verifichiamo la condizione 1 del teorema, cioè la base dell'induzione. Ovvero che P(1) è vera.
+Verifichiamo la condizione 1 del teorema, cioè la base dell'induzione. Ovvero che P(h)=P(1) è vera.
 $P(1) = \sum ^n _{h=1} \frac{k}{2^k} = 2 - \frac{3}{2} \rightarrow \frac{1}{2} = \frac{1}{2}$ <br>
 Dunque un mezzo uguale un mezzo implica che P(1) è vera e la base è verificata.
 
@@ -344,10 +344,22 @@ Questa è la tesi del passo induttivo (non vero nome, non necessario).
 *Faccio finta la prima sia vera e dimostro l'altra*
 
 Primo metodo:
-Scegliere uno dei deu termini dell'uguaglianza e cercare di mettere in evidenza uno dei due membri della tesi
+Scegliere uno dei due termini dell'uguaglianza e cercare di mettere in evidenza uno dei due membri della tesi
 
 $\sum ^n _{k=1} \frac{k}{2^k} = (\sum ^n _{k=1} \frac{k}{2^k}) + \frac{n+1}{2^{n+1}}$
 
 Passaggi vari da Recuperare
 
-Il passo induttivo è verificato. 
+Il passo induttivo è verificato.
+
+
+###### Versione compatta
+$\sum^{n+1} _{k=1} \frac{k}{2^k} =2-\frac{(n+1)+2}{2^{n+1}}$
+
+Diventa
+
+$\sum^{n+1} _{k=1} \frac{k}{2^k} =2-\frac{(n+1)+2}{2^{n+1}}$
+
+
+##### Cardinalità
+|X| = n (cardinalità di X)

@@ -190,6 +190,17 @@ fun max(a:real,b,c) = (*maximum of reals*)
 val max = fn: real * real * real -> real
 ```
 
+#### Altro modo per scrivere le funzioni
+La funzione somma:
+```ML
+fun somma(a,b) = a+b;
+```
+può essere riscritta come:
+```ML
+val somma = fn (a,b) => a+b;
+```
+
+
 ###### Esercizio
 [$a_1$, $a_2$, $a_n$,] $\rightarrow$ [$a_2$, $a_n$, $a_1$]
 
@@ -237,4 +248,30 @@ Invertire una lista ricorsivamente:
 val reverse = fn: ''a list -> ''a list
 > reverse [1,2,3,4];
 val it = [4, 3, 2, 1]: int list
+```
+
+###### Funzione getindex (fatta da me)
+```ML
+fun find(list, i) =
+if i = 0 then hd(list) else find(tl(list), i-1);
+```
+
+#### Funzione in funzione ma non acora dichiarata
+```ML
+> fun take(L) = if L = nil then nil else hd(L)::skip(tl(L))
+# and
+# skip (L) = if L = nil then nil else take(tl(L));
+(*Output: *)
+val skip = fn: ''a list -> ''a list
+val take = fn: ''a list -> ''a list
+```
+
+###### Lunghezza lista
+```ML
+fun length (L) = if L = nil then 0 else 1+length(tl(L));
+```
+
+###### Potenza
+```ML
+fun pow(x,i) = if i=0 then 1 else x*pow(x,i-1);
 ```
