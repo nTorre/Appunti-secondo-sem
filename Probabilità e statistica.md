@@ -8,6 +8,7 @@
 - user: PS2021
 - password: Kolmogorov2021
 - [pdf]("http://datascience.maths.unitn.it/~claudio/teaching/ps/2021/probabilita-dispensa.pdf")
+- [Esercizi giornalieri]("http://datascience.maths.unitn.it/ps");
 
 #### Esame
 - 1h e 30min
@@ -465,7 +466,7 @@ e togliere gli elementi che compaiono più volte.
 $D_{3,2} = 3\times 2 = 6$
 
 ###### Permutazioni
-Caso in cui r=n
+Caso in cui r=n, quindi n!
 
 ###### Combinazioni
 (1) ma l'ordine non è importante e un elemento può comparire al più una volta
@@ -477,3 +478,19 @@ $C_{n,r} = \frac{D_{n,r}}{P_r} = \frac{D_{n,r}}{r!} = \frac{n!}{(n-r)!r!}$
 - Registrarsi
 - Giovedì 24/03 e Venerd 25/03 ci sono due esercizi di prova. (non valgono).
 - Ricordarsi che le risposte devono essere date in formato R (decimali col . tutto qua)
+
+### R
+Vettore:
+```R
+ x <- c(1,2,3,4);
+ ```
+
+ Matrici:
+ ```R
+ X <- matrix(data=x, nrow=2, byrow=TRUE)
+ ```
+
+ Dimensione:
+ ```R
+ dim(X);
+ ```

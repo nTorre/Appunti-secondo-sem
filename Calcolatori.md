@@ -113,7 +113,10 @@ B è detta base di numerazione. Le basi pù utilizzate sono 2, 8, 10 e 16.
 - cifra binaria: binary digit (bit)
 - numero massimo di cifre decimali rappresentabili: (2^k)-1
 
-# Recuperare parte sulla conversione
+###### Complemento a due
+1. Convertire il numero in positivo in binario
+2. Dove c'è uno mettiamo zero e viceversa
+3. Ci sommiamo il numero uno
 
 
 ##### Virgola fissa
