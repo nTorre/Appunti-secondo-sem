@@ -16,3 +16,6 @@ Prova pratica:
 #### <a href="https://people.inf.elte.hu/delsaai/java/6Eckel%20-%20Thinking%20in%20Java%20(4th%202006)%20p1079.pdf">Libro di testo</a>
 
 <hr>
+
+##### Note
+Package (default) ha scope interno al pacchetto, no sotto cartelle.

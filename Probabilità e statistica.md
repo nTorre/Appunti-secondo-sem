@@ -8,7 +8,7 @@
 - user: PS2021
 - password: Kolmogorov2021
 - [pdf]("http://datascience.maths.unitn.it/~claudio/teaching/ps/2021/probabilita-dispensa.pdf")
-- [Esercizi giornalieri]("http://datascience.maths.unitn.it/ps");
+- <a href="http://datascience.maths.unitn.it/ps">Esercizi giornalieri</a>;
 
 #### Esame
 - 1h e 30min
@@ -476,7 +476,7 @@ $C_{n,r} = \frac{D_{n,r}}{P_r} = \frac{D_{n,r}}{r!} = \frac{n!}{(n-r)!r!}$
 
 #### Esercizi giornalieri
 - Registrarsi
-- Giovedì 24/03 e Venerd 25/03 ci sono due esercizi di prova. (non valgono).
+- Giovedì 24/03 e Venerdì 25/03 ci sono due esercizi di prova. (non valgono).
 - Ricordarsi che le risposte devono essere date in formato R (decimali col . tutto qua)
 
 ### R
@@ -494,3 +494,246 @@ Vettore:
  ```R
  dim(X);
  ```
+
+#### Probabilità condizionata
+($\Omega, A,$ P) <br>
+Consideriamo due eventi A e H. Assumiamo, inoltre, che la probabilità di H sia diversa da 0 (P(H) > 0).
+
+Dato e fatto che H è accaduto (probabilità condizionata)
+Pr(A|H) = $\frac{P(A\cap H)}{P(H)}$
+
+P(H|H) = 1
+
+*Nota: La probabilità di H è strettamente positiva, altrimenti non potremmo normalizzare*
+
+###### Eserizio
+Si lanciano due dadi equilibrati a 6 facce. <br>
+Si conosce che la somma di due risultati è 6. <br>
+Qual è la probabilità che il primo risultato sia 3.
+
+$\Omega_1$ = {1,...,6} <br>
+$\Omega_2$ = {1,...,6}
+
+$\Omega = \Omega_1 \times \Omega_2$
+
+$A_1 = P(\Omega_1)$<br>
+$A_2 = P(\Omega_2)$
+
+$A = A_1 \otimes A_2$
+
+H = {"la somma dei risultati è 6"} = {(1,5),(2,4),(3,3),(4,2),(5,1)}
+
+A = {"Il primo risultato è 3"} = {(3,1),(3,2),(3,3),(3,4),(3,5),(3,6)}
+
+P(A $\cap$ H) = P((3,3)) = $\frac{1}{36}$
+
+P(A|H) = $\frac{\frac{1}{36}}{\frac{1}{36}} = \frac{1}{5}$
+
+
+#### Teorema delle probabilità totali
+Partizione di un insieme. Dato uno spazio probabilizzabile ($\Omega, A$) la famiglia di *eventi* $\{A_n\}^\infty_{n=1}$ è detta partizione di $\Omega$ se:
+1. $\cup^\infty_{n=1} A_n = \Omega$
+2. $A_i \cap A_j = \emptyset \:\:\:\: \forall i \neq j$
+
+Dato un evento B allora la famiglia di eventi $\{A_n \cap B\}^\infty _{n=1}$ è una partizione di B
+
+Assumiamo che P($A_n$) > 0 per tutti gli A $_n$
+
+P(B) = $P(\cup ^ \infty _{n=1}(A_n \cap B)) = \sum ^ \infty _{n=1} P(A \cap B)$
+
+
+#### Teorema di Bayes
+
+Consideriamo uno spazio probabilizzato ($\Omega, A,$ P) e prendiamo una successione di eventi $\{A_i\}^\infty_{i=1}$ in modo che siano una partizione di $\Omega$. Assumiamo P(Ai) > 0 allora dato un evento B abbiamo che:
+
+$$
+P(A_i | B) = \frac {P(B|A_i)P(A_i)}{\sum ^\infty _{J=1} P(B|A_j)\cdot P(A_j)} \:\:\:\:\: P(B) > 0
+$$
+
+Dimostrazione <br>
+P(A | B) P(B) = P(A $\cap$ B) = P(B|A) P(A)
+
+##### Formule di Bayes
+
+$P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}$
+
+$P(B|A) = \frac{P(A|B) \cdot P(B)}{P(A)}$
+
+
+###### Esercizio
+Il 26% degli iscritti on un'associazione sportiva è costituita da maschi. Il 45% di questi praticano la pallacanestro. Mentre tra le femmine solo il 25% praticano pallacanestro.
+
+Determinare la probabilità che scegliendo a caso un giocatore di pallacanestro questo sia maschio.
+
+P(M) = 0.26 <br>
+P(F) = 1-P(M) = 1-0.26 = 0.74
+
+A = {"giocatore di pallacanestro"}
+
+45% dei maschi giocano a pallacanestro -> P(A|M) <br>
+25% delle femmine giocano a pallacanestro -> P(A|F)
+
+$$
+P(M|A) = \frac{P(A|M) \cdot P(M)}{P(A|M) \cdot P(M) + P(A|F) \cdot P(F)} = 0.387
+$$
+<br>
+
+### Indipendenza stocastica
+($\Omega, A,$ P) e due eventi A, B. <br>
+Diremo che A e B sono stocasticamente indipendenti se e solo se la probabilità della loro intersezione può essere scritta come il prodotto delle probabilità. (P(A $\cap B$ )) = P(A) P(B))
+
+$$
+P(A|B) = \frac{P(A \cap B)}{P(B)} = \frac{P(A) \cdot P(B)}{P(B)} = P(A)
+$$
+
+A e B sono stocasticamente indipendenti se conoscere che B è accaduto, la probabilità di A, pur avendo questa nuova informazione, è uguale a quella originale.
+
+Se due eventi sono tra loro incompatibili (A e B tali che P(A) > 0 e P(B) > 0), allora non sono stocasticamente indipendenti. Perchè se fossero stocasticamente indipendenti, avremmo questo: P(A $\cap$ B) = P(A) P(B) > 0.
+
+Se sono incompatibili sono stocasticamente dipendenti.
+
+Domanda: se A e B sono stocasticamente indipendenti, allora A $^c$ e B sono stocasticamente indipendenti? Si.
+
+###### Esercizio
+Si supponga di lanciare un dado a 6 facce.
+
+$\Omega$ = {1,2,3,4,5,6} e P({i}) = 1/6
+
+A = {2,4,6} B = {3,6}
+
+P(A) = 3/6 P(B) = 2/6 P(A $\cap$ B) = P({6}) = 1/6
+
+P(A) * P(B) = 1/6 e quindi A e B sono stocasticamente indipendenti.
+
+###### Esercizio
+Dado a 6 facce, ma sbilanciato, tanto che:
+
+P({i}) = 1/12 i = 1,2,3,4 <br>
+P({i}) = 1/3 i=5,6
+
+P(A) = P(2) + P(4) + P(6) = 1/2 <br>
+P(B) = P(3) + P(6) = 5/12
+
+P(A $\cap B$) = P({6}) = 1/3
+
+A e B non sono stocasticamente indipendenti.
+
+**Def**: Indipendenza stocastica di A1, A2, ..., An se <br>
+P($A_{i1} \cap A_{i2} \cap ... \cap A_{in}$)
+
+###### Esempio
+$A_1, A_2, A_3$ sono stocasticamente indipendenti se:
+
+$P(A_1 \cap A_2) = P(A_1) P(A_2)$ <br>
+$P(A_2 \cap A_3) = P(A_2) P(A_3)$ <br>
+$P(A_1 \cap A_3) = P(A_1) P(A_3)$ <br>
+$P(A_1 \cap A_2 \cap A_3) = P(A_1) P(A_2) P(A_3)$ <br>
+
+Devo controllare le coppie e le terne, perchè ce ne sono 3
+
+###### Esercizio
+Si considerino quattro famiglie con due figli classificate nel modo seguente (M, M), (M, F), (F, M), (F, F) in cui M indica maschio, F indica femmina e l’ordine di ogni coppia indica l’anzianità. <br>
+Si sceglie a caso una famiglia e si considerino i seguenti eventi
+- A1 =“primo figlio maschio”;
+- A2 =“due figli di sesso differente”;
+- A3 =“secondo figlio maschio”; Sono i tre eventi indipendenti?
+
+Continua pdf
+
+## Probabilità sui reali
+
+$(\mathbb{R}, P(\mathbb{R}) \rightarrow (\mathbb{R},P(\mathbb{R}),P)$
+
+
+### Funzione di distribuzione
+
+Funzione di distribuzione uniforme nell'intervallo [0,1]
+
+<img src="Images/graficofunzdidistr.svg" style="background: #fff">
+
+Due tipi di distribuzione:
+- continua
+- discreta
+- le miste sono composizione di queste due (non costituiscono un tipo singolo)
+
+1. Nel secondo caso, se 0 $\leq$ a $\leq$ b $\leq$ 1 <br>
+P((a,b]) = F(b)-F(a) = 0
+
+2. $-\infty$ $\leq$ a $\leq$ b $\leq$ 0 <br>
+P((a,b)) = 0-0 = 0
+
+3. $\leq$ a $\leq$ b $\leq$ $\infty$ <br>
+P([a,b)) = 0
+
+4. a < 0 < b < 1 <br>
+P((a,b]) = 1/2-0 = 1/2
+
+
+###### Probabilità di un singoletto
+Creo un intervallo che lo contiene
+
+P({0}) = $P(\lim_{n\to\infty} (0-1/n,0])$ = lim n->0 P((0-1/n,0]) = lim x-> inf F(0)-F(-1/n) = 1/2-lim n->inf F(-1/n) = 1/2 - 0
+
+P({1}) = P(lim n-> inf (1-1/n, 1]) = lim n-> inf F(1)-F(1-1/n) = 1-1/2 = 1/2
+
+Funzioni di distribuzione che assegnano masse di orobabilità ad uan quantità al più numerabile di singoletti (reali) è chiamata discreta.
+
+
+<hr>
+
+La prima è invece una funzione di distribuzione assolutamente continua. La seconda fa salti.
+
+Esempio: funzione di distribuzione mista. <br>
+La prima funzione disegnata è $F_1(x)$, mentre la seconda $F_2(x)$ e 0 $\leq \epsilon \leq 1$
+
+$F(x)=(1-\epsilon) F_1(x)+\epsilon F_2(x)$
+
+<img src="Images/graficomista.png" style="background: #fff">
+
+<hr>
+
+###### Continua
+Def: una funzione di distribuzione è assolutamente continua se è una funzione continua e è derivabile su tutto $\mathbb{R}$ tranne al più in una quantità numerabile di punti
+
+Continua dappertutto e non numerabile in una quantità determinabile di punti -> non è derivabile in 1 e 0 e continua dappertutto -> assolutamente continua.
+
+Esempio: funzione continua ma non assolutamente continua (di Cantor)
+
+
+<hr>
+
+- Se F è assolutamente continua possiamo utilizzare la densità (o densità di probabilità);
+- Se F è discreta possiamo utilizzare la funzione di probabilità.
+
+#### Densità
+Se F è assolutamente continua, definiamo la densità nel seguente modo (nei punti di derivabilità di F):
+$$
+f(x) = F' (x)
+$$
+
+Esempio: Calcolare la densità di $F_1$
+$$
+F_1(x) = \begin{cases}
+  0 \:\:\:\:\:\:x < 0 \\
+  x \:\:\:\:\:\:0 \leq x < 1 \\
+  1 \:\:\:\:\:\:x \geq 1
+\end{cases}
+$$
+
+$$
+f_1(x) = \begin{cases}
+  0 \:\:\:\:\:\:x < 0 \\
+  1 \:\:\:\:\:\:0 \leq x < 1 \\
+  0 \:\:\:\:\:\:x \geq 1
+\end{cases}
+$$
+
+
+<img src="Images/derivatadistr.png" style="background: #fff" >
+
+*Img:* $f_1(x)$
+
+
+<img src="Images/probdistr.png" style="background: #fff">
+
+$P((a,b]) = \int ^b _a f_1(x)dx = [F_1(x)]_a^b = F_1(b)-F(_1a)$

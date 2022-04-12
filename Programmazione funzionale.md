@@ -275,3 +275,35 @@ fun length (L) = if L = nil then 0 else 1+length(tl(L));
 ```ML
 fun pow(x,i) = if i=0 then 1 else x*pow(x,i-1);
 ```
+
+#### Funzioni
+```ML
+print("...") (*\n carattere escape*)
+str(carattere) (*Da carattere a stringa*)
+Real.toString(3.2)
+Int.toString(3)
+Bool.toString(true)
+```
+
+Es di stampa
+```ML
+> fun printList nil = ()
+# | printList (x::xs) =
+# (    
+# print(Int.toString(x));
+# print "\n";
+# printList xs;
+# );
+```
+
+```ML
+val infile = TextIO.openIn("test");
+val infile = ?: TextIO.instream;
+TextIO.endOfStrem(infile);
+TextIO.inputN(infile, 4); (*4 caratteri*)
+TextIO.inputLine(infile)
+TextIO.lookhead(infile);
+```
+
+
+SOME NONE, non so cosa siano.

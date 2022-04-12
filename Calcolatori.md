@@ -118,6 +118,8 @@ B è detta base di numerazione. Le basi pù utilizzate sono 2, 8, 10 e 16.
 2. Dove c'è uno mettiamo zero e viceversa
 3. Ci sommiamo il numero uno
 
+Numeri rappresentabili con n bit = $2^{n-1}-1$
+
 
 ##### Virgola fissa
 Ho a disposizione un certo numero di bit. Un certo numero di bit fissi viene  utilizzata per rappresentare la parte del numero intera, una parte per la parte decimale. <br>
@@ -144,6 +146,13 @@ Mettendo insieme 6.125 = 110.001
 ##### Virgola mobile
 Un numero $x$ pulò essere scritto come: $x=M*B^E$, dove $M$ = Mantissa e E = esponente.
 
+In memoria:
+|S (+ 0 / - 1)|E (8 bit)|M (23 bit)|
+|--|--|--|
+
+1. Convertire il numero in binario
+2. Sopstare le cifre fino ad avere solo un uno a sinistra della virgola e contare gli n spostamenti ($2^n$).
+3. E = n+127 ⇒ esp = E - 127 ⇒ (-126 ≤ esp ≤ 127)
 
 #### Codifica del testo
 L'idea è di utilizzare la codifica binaria per rappresentare i caratteri testuali. <br>
@@ -412,3 +421,54 @@ slli x11, x19, 4    # shift logical left immediate
 ```
 
 L’effetto è di memorizzare in x11 valore 9*2^4=144
+
+#### Procedure (o funzioni)
+###### Chiamata
+I parametri vengono passati nei registri tra x10 e x17 (gli stessi di risposta). <br>
+Durante l'esecuzione della procedura restano invariati i registri x8 e x9 e da x18 a x27. Quindi se la subroutine necessita di molti registri i valori di questi devono essere salvati per poi essere ripristinati. Infine i registri da x5 a x7 e da x28 a x29 possono essere utilizzati dalla subroutine per contenere valori temporanei, quindi non bisogna aspettarsi che restino inalterati. Infine x0 è in sola lettura e x1 per convenzione contiene l'indirizzo di ritorno dalla chiamata. L'ABI descrive poi tutti gli altri registri (es. x2 = Stack Pointer etc.)
+
+###### Salvataggio nello stack
+
+
+###### Ritorno
+
+### Intel
+Sono tutti preceduti dal prefisso %. Ci sono 16 registri a 64 bit (piu o meno) general purpose. <br>
+Hanno nomi che riflettono gli strascichi di compatibilita con le versioni precedenti:
+- %rax, %rbx, %rcx, %rdx, %rsi, %rdi, %rbp, %rsp
+- %r8, ..., %r15
+
+Note:
+- %rsp → stack pointer;
+- %rbp → base pointer (puntatore a stack frame)
+- %rsi e %rdi derivano da due registri %si e %di della CPU 8086 per la copia di array (%si → source index, %di → destination index)
+
+1. I registri %rax ... %rsp estendono registri a 32 bit (%eax ... %esp)
+2. Che a loro volta estendono rispettivi registri a 16 bit (%ax ... %sp)
+2. Ognuno dei primi quattro registri (%ax, %bx, %cx, e %dx) sono composti da 2 registri a 8 bit indicati sostituendo %x con %h o %l):
+`%ax == %ah + %al`
+
+Ognuno dei registri r8, ... , r15 estende il rispettivo registro a 32 bit (r8d, ... , r15d), che a loro volta estende rispettivo registro a 16 bit (r8w, ... , r15w) che a loro volta contiene un registro a 8 bit (r8b, ... , r15b).
+
+Instruction Pointer “visibile”: %rip
+Esistono flags register: %rflags (estende %eflags, che estende %flags)
+
+Set di flag settati da istruzioni logico aritmetiche:
+- CF : Carry Flag → Messo a 1 se risultato e andato in unsigned overflow o se c’e carry-out
+- ZF : Zero Flag → Messo a 1 se risultato e zero `
+- SF : Sign Flag → Messo a 1 se risultato e negativo `
+- OF : 2’s Overflow Flag → Messo a 1 se risultato e andato in overflow
+
+#### Convenzioni di chiamata
+
+Primi 6 argomenti:
+- %rdi, %rsi, %rdx, %rcx, %r8 ed %r9
+- altri argomenti (7 → n): sullo stack
+
+Valori di ritorno:
+- %rax e %rdx
+
+Registri preservati:
+- %rbp, %rbx, %r12, %r13, %r14 ed %r15
+- Registri non preservati:
+- %rax, %r10, %r11, oltre ai registri per passaggio parametri: %rdi, %rsi, %rdx, %rcx, %r8 ed %r9
