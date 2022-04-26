@@ -672,9 +672,11 @@ P((a,b]) = 1/2-0 = 1/2
 ###### Probabilità di un singoletto
 Creo un intervallo che lo contiene
 
-P({0}) = $P(\lim_{n\to\infty} (0-1/n,0])$ = lim n->0 P((0-1/n,0]) = lim x-> inf F(0)-F(-1/n) = 1/2-lim n->inf F(-1/n) = 1/2 - 0
+$$
+P({0}) = P(\lim_{n\to\infty} (0-\frac{1}{n},0]) = \\ \lim _{n\to0} P((0-\frac{1}{n},0]) = \lim _{x\to \infty} F(0)-F(-\frac{1}{n}) = \\ \frac{1}{2}-\lim _{n\to \infty} F(\frac{-1}{n}) = \frac{1}{2} - 0
+$$
 
-P({1}) = P(lim n-> inf (1-1/n, 1]) = lim n-> inf F(1)-F(1-1/n) = 1-1/2 = 1/2
+$P({1}) = P(\lim _{n \to \infty} (1-\frac{1}{n}, 1]) = \lim _{n \to \infty} F(1)-F(1-\frac{1}{n}) = 1-\frac{1}{2} = \frac{1}{2}$
 
 Funzioni di distribuzione che assegnano masse di orobabilità ad uan quantità al più numerabile di singoletti (reali) è chiamata discreta.
 
@@ -737,3 +739,29 @@ $$
 <img src="Images/probdistr.png" style="background: #fff">
 
 $P((a,b]) = \int ^b _a f_1(x)dx = [F_1(x)]_a^b = F_1(b)-F(_1a)$
+
+#### Discreta
+Se F è discreta allora posso utilizzare la funzione di probabilità:
+$$
+p(x)=F(x)-F(x^-) \\
+F(x^-) = \lim _{y\to x^-} F(y)
+$$
+
+Esempio per $F_2$ ($P_2(x)$):
+<img src="Images/p(x).png" style="background: #fff">
+
+$$
+p_2(x) = \begin{cases}
+  1/2 \:\:\:\:\:\:x \in \{0,1\} \\
+  0 \:\:\:\:\:\: altrimenti
+\end{cases}
+$$
+
+Data $P_2(x), F(x)$: <br>
+$F(x) = \sum_{z:z\leq x} p_2(z)$
+
+$F(\frac{1}{2}) = \sum_{z:z\leq x} P_2(z) = p_2(0)$
+
+$P((a,b]) = \int^b_a f_1(x) dx = [F_1(x)]^b_a = F_1(b)-F_1(a)$
+
+### Variabili aleatori (variabili casuali)

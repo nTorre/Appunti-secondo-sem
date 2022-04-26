@@ -18,7 +18,7 @@ Ma allora $B = \mathbb{N}$ e quindi $A=\emptyset$.
 
 <hr>
 
-#### 2. Teorema di esistenza e unicità del quoziente e del resto della divisione euclidea tra numeri interi.
+#### 2. Teorema di esistenza e unicità del quoziente e del resto della divisione euclidea tra numeri interi. (Pagina 20 pdf)
 
 *Siano $n,m \in \mathbb{Z}$ con $m \neq 0$, allora esistono unici $q,r \in \mathbb{Z}$ tali che*
 $$
@@ -35,7 +35,13 @@ k = mq + r \\
 0 \leq r < m
 $$
 ma allora $n=k+m=mq+r+m=(q+1)m+r$. <br>
-Supponiamo ora $n<0$ e $m>0$. Allora $-n >0$ e quindi per il caso precedente si ha che esistono $q,r \in \mathbb{Z}$ tali che $-n=mq+r$ e $0 \leq r < m$ allora 
+Supponiamo ora $n<0$ e $m>0$. Allora $-n >0$ e quindi per il caso precedente si ha che esistono $q,r \in \mathbb{Z}$ tali che $-n=mq+r$ e $0 \leq r < m = |m|$. E quindi $n = m(-q) - r$. Se $r=0$ abbiamo finito, se invece $0 < r < m$ allora $0 < m - r < m = |m|$ e $n = m(-q)-r=m(-q)-m+m-r = m(-1-q)+(m-r)$ <br>
+Sia infine $m<0$ allora $-m > 0$, quindi per due casi precedenti esistono $q, r \in \mathbb{Z}$ tali che $n=(-m)q+=m(-q)+r$ con $0 \leq r < -m = |m|$.
+
+**Unicità** <br>
+Supponiamo che $n=mq+r$ e $n=mq'+r'$ con $0 \leq$, $r' < m$. <br>
+Supponiamo che $r'\geq r$, allora $m(q-q') = r' -r$ e quidi passando ai moduli si ha $|m||q-q'| = |r'-r| = r'-r < |m|$, da cui $0\leq |q-q'|<1$ e quindi |q-q'| = 0 ovvero $q=q'$. Ma allora da $mq+r = mq'+r'$ segue che anche $r=r'$
+
 
 <hr>
 

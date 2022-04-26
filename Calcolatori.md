@@ -433,7 +433,7 @@ Durante l'esecuzione della procedura restano invariati i registri x8 e x9 e da x
 ###### Ritorno
 
 ### Intel
-Sono tutti preceduti dal prefisso %. Ci sono 16 registri a 64 bit (piu o meno) general purpose. <br>
+Sono tutti preceduti dal prefisso %. Ci s¯ono 16 registri a 64 bit (piu o meno) general purpose. <br>
 Hanno nomi che riflettono gli strascichi di compatibilita con le versioni precedenti:
 - %rax, %rbx, %rcx, %rdx, %rsi, %rdi, %rbp, %rsp
 - %r8, ..., %r15
