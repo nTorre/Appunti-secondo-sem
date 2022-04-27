@@ -113,3 +113,48 @@ int *X, *Y;
 *X = 5;
 Y = X ; // Y points to the same object as X
 ```
+
+#### 2.4 Blocchi
+
+Nei moderni linguaggi di programmazione l'environment è *strutturato*. Un **blocco** è una sezione di un programma delimitata da simboli di apertura e chiusure che contiene dichiarazioni *locali* per questa determinata regione:
+- Algol, Pascal `begin end`
+- Java, c `{...}`
+- Lisp `(...)`
+- ML `let in end`
+- Altri casi:
+  - Anonimo (o inline)
+  - Associato ad una procedura
+
+Vi sono diverse ragioni per utilizzare i blocchi. Ad esempio per comodità di visibilità di variabili, chiarezza, migliore utilizzo della memoria, ricorsione.
+
+L'utilizzo dei blocchi introduce il concetto di **nesting**. Una dichiarazione locale è visibile nel blocco in cui si trova e in tutti quelli contenuti dal blocco stesso (nested) fino al momento in cui non viene dichiarata un'altra variabile con lo stesso nome, questo nasconde o maschera la dichiarazione precedente.
+
+
+#### 2.5 Suddivisione dell'environment
+L'environment in uno specifico blocco può essere suddiviso in:
+- **local environment**, che comprende le associazioni effettuate all'interno del blocco locale
+- **non local environment**, ovvero le associazioni che vengono ereditate da altre blocchi
+- **global environment**, l'environment che comprende tutte le associazioni visibili in tutti i blocchi
+
+Un'associazione creata quando si entra in un blocco locale (naming), può essere utilizzata (referecing) all'interno del blocco. Eventualmente può disattivare un'associazione effettuata precedentemente in un blocco "padre" che viene riattivata quando si esce dal blocco locale e l'associazione viene distrutta. Dunque le operazioni effettuabili sui denotable objects sono:
+- Creazione
+- Accesso
+- Modifica (se l'oggetto è modificabile)
+- Distruzione
+
+*Nota: la creazione e distruzione di un oggetto non sono la stessa cosa della distruzione e creazione dell'associazione*
+
+Eventi fondamentali:
+1. Creazione di un oggetto
+2. Creazione di un'associazione per l'oggetto
+3. Reference ad un oggetto tramite associazione
+4. Disattivazione di un'associazione
+5. Riattivazione di un'associazione
+6. Distruzione di un'associazione
+7. Distruzione di un oggetto
+
+*Note: da 1 a 7 si tratta della lifetime di un oggetto* <br>
+*Note: da 2 a 6 si tratta della lifetime di un'associazione*
+
+
+#### 2.6 Lifetime
