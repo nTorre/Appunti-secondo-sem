@@ -1,6 +1,13 @@
-## Appunti di teoria di programmazione funzionale
+<h2 style="margin-bottom: 0px; text-align: center"> Appunti di teoria di programmazione funzionale</h2>
+
+<h4 style="margin-bottom: 30px; text-align: center">Torriglia Nicolas</h4>
+
+
+### Premessa
+Pdf utile allo studio, molto probabilmente completo, ma è preferibile affiancare il Gabbrielli Martini, Linguaggi di porgrammazione. Questo pdf è una traduzione approfondita delle slides di kuper
 
 ### 1 Introduzione alle macchine
+
 
 #### 1.1 Abstract machines
 Un computer è composto almeno dalle seguent componenti:
@@ -85,6 +92,8 @@ I compilers non sempre compilano completamente un programma. Per efficienza alcu
 
 
 ### 2 Names and environments
+*Questa parte non è semplicissima, soprattutto la parte sullo scoping styatico e dinamic. Consiglio lettura del pdf (capitolo 6). Tuttavia ciò che viene riportato qui è sufficiente per la comprensione e per l'esame*
+
 I nomi sono sequenze di caratteri utilizzati per denotare qualcos'altro. Nei linguaggi di programmazione sono spesso identificatori (token alfanumerici)
 
 #### 2.1 Denotable objects
@@ -158,3 +167,216 @@ Eventi fondamentali:
 
 
 #### 2.6 Lifetime
+La liftime di un oggetto non corrisponde con quella di un'associazione con il determinato oggetto. Infatti può essere più **lunga**. <br>
+Ad esempio quando un oggetto viene passato ad una funzione come parametro. In questo caso l'oggetto esiste prima di entrare nella funzione e dopo, ma l'associazione locale dell'oggetto ha durata limitata: inizia dopo la creazione dell'oggetto e finisce prima della distruzione dell'oggetto
+
+Tuttavia esistono dei casi in cui la liftime di un oggetto può essere più **corta** di quella di un'associazione. Basti pensare all'allocazione dinamica:
+
+```c++
+int *X, *Y;
+X = (int *) malloc (sizeof(int));
+Y=X;
+free(X);
+X=null;
+```
+
+Dopo il comando `free()`, l'oggetto smette di esistere. Tuttavia, continua ad esserci una *dangling reference* da parte di Y.
+
+*Dangling reference: puntatore perdente, ovvero un puntatore che si riferisce ad un'area di memoria non più valida*
+
+#### 2.7 Scope
+Come possiamo interpretare le regole di visibilità? <br>
+Una dichiarazione locale in un blocco è visibile nel blocco e in tutti quelli *nested*, almeno finché una dichiarazione con lo stesso nome non nasconde la precedente.
+
+Lo scoping inteso come ricerca dell'oggetto denominato da un nome può essere di due tipi: **statico e dinamico**.
+
+Nella maggior parte dei linguaggi moderni si utilizza lo scoping statico. Esso viene anche definito lessical scoping. In questa tipologia di scoping una varibile fa sempre riferimento all'environment superiore. Questa è una proprietà del testo del programma e non è collegata allo stack di chiamate runtime. <br>
+Lo scoping statico rende anche molto più semplice creare un codice modulare poiché un programmatore può capire l'ambito semplicemente guardando il codice. Al contrario, il dinamic scoping richiede al programmatore di anticipare tutti i possibili contesti dinamici.
+
+Esempio di static scoping:
+```c
+#include<stdio.h>
+int x = 10;
+
+// Chaiamta da g()
+int f()
+{
+   return x;
+}
+
+// g() ha la sua varibile
+// di nome x e chiama f()
+int g()
+{
+   int x = 20;
+   return f();
+}
+
+int main()
+{
+  printf("%d", g());      // l'output sarà 10
+  printf("\n");
+  return 0;
+}
+```
+
+Con lo **scoping dinamico** un identificatore globale si riferisce all'identificatore associato all'ambiente più recente ed è raro nei linguaggi moderni. Consideriamo il seguente pseudocodice come programma scritto in un linguaggio che supporta il dynamic scoping (stesso programma di prima):
+```c
+int x = 10;
+
+int f()
+{
+   return x;
+}
+
+int g()
+{
+   int x = 20;
+   return f();
+}
+
+main()
+{
+  printf(g());
+}
+```
+Il risultato sarà 20. Questo è dovuto al fatto che l'associazione più recente diventa "la prioritaria". Quando, all'interno di g() viene chiamato f(), viene prima creata una nuova associazione ad x che nello dynimac scoping continua ad esistere in f() nonostante la variabile gloable. <br>
+Il motivo è perché ogni volta che viene chiamata ed eseguita una nuova funzione, il suo scope viene aggiunto allo stack degli scope e sovrascrive gli scope precedenti fino alla fine della sua esecuzione, quando il suo scope viene rimosso dallo stack.
+
+*Definizione da Gabbrielli Martini: <br>Secondo la regola dello scope dinamico, l'associazione valida per un nome X, in un qualsiasi punto P di un programma, è la più recente (in senso temporale) associazione creata per X che sia ancora attiva quando il flusso di esecuzione arriva a P.*
+
+Alcuni vantaggi dello static scoping sono:
+- miglior lettura e facilità di scrittura del codice;
+- maggior efficienza
+- utilizzato nella maggioranza dei linguaggi
+
+Nel dynamic scoping:
+- difficoltà di lettura del programma
+- difficile da implementare e meno efficiente
+- utilizzato da pochi linguaggi e sempre affiancato dallo scoping statico.
+
+Da notare che lo scoping dinamico non interferisce con lo scoping per annidamento. Tuttvia "riscrive le regole" in maniera dinamica. Resta di fatto che lo scoping dinamico è vantaggioso in rarissimi casi e viene utilizzato molto pochi in alcune versioni di alcuni linguaggi. Ma quindi quando è vantaggioso?
+
+Proviamo a pensare da una funzione `visualizza(testo)` che ha lo scopo di stampare il `testo` in un colore definito da una variabile non locale definita a nero. Se la maggior parte delle stampe è nera è un vantaggio limitare il passaggio di parametri inutili. Così se vogliamo effettuare una stampa di un colore diverso basterà assegnare a `colore` il valore desiderato prima di chiamare la funzione `visualizza`
+
+*Molto consigliati gli esercizi a fine capitolo*
+
+### 3 Gestione della memoria
+Capitolo 7 Gabbrielli
+
+La memoria viene gestita in diversi modi:
+- statica, allocata al momento dell'allocazione
+- dinamica, allocata al momento dell'esecuzione e si divide in:
+  - Stack, oggetti allocati in LIFO
+  - Heap, gli oggetti possono essere allocati e deallocati in qualsiasi momento
+
+#### 3.1 Allocazione statica
+In questa modalità di allocazione, tutti gli oggetti vengono allocati al momento della compilazione. Ogni oggetto ha un indirizzo assoluto che viene mantenuto durante l'esecuzione. <br>
+Normalmente vengono allocati staticamente:
+- variabili globali;
+- variabili locali di subprogrammi, a meno di ricorsione
+- costanti
+- tabelle usate runtime (ad esempio per il type check o per il garbage collector)
+
+Nel caso in cui il linguaggio di programmazione non supporti la ricorsione è possibile gestire anche gli altri elementi staticamente. Ad esempio le subroutine (procedure allocate staticamente), hanno la seguente struttura in memoria:
+- informazioni di sistema
+- indirizzo di ritorno
+- parametri
+- variabili locali
+- risultati intermedi
+
+E' facile notare come la stessa procedura chiamata due volte nel corso dell'esecuzione condivide la stessa zona di memoria il che è corretto in quanto non vi possono essere due chiamate attive alla stessa funzione contemporaneamente senza ricorsione.
+
+#### 3.2 Gestione dinamica mediante pila
+Nell'allocazione dinamica tramite stack, abbiamo l'attivazione di un record o frame che contiene le informazioni della sua istanza. Dunque ogni blocco, sia esso inline ({...}) o una funzione viene aperto e chiuso usano la politica LIFO. Consideriamo la seguente struttura:
+```c
+A:{
+  int a = 1;
+  int b = O;
+
+  B:{
+    int c = 3;
+    int b = 3;
+  }
+  b = a+l;
+}
+```
+
+Quando si entra nel blocco A e poi nel B, per uscire da A è necessario prima uscire da B.
+
+Quello che succede nel momento dell'esecuzione è che bisogna allocare sulla pila le variabili a e b. Lo stesso lo si fa per le variabili c e b del blocco B. All'uscita dei rispettivi blocchi si fa, invece, un'operazione di pop. Il record o frame è lo spazio allocato per ogni blocco inline o attivazione di procedura. <br>
+E' evidente che con questo metodo di allocazione è possibile attivare la stessa funzione più volte contemporaneamente in quanto ad ogni attivazione è associato un frame differente, permettendo, dunque, la ricorsione.
+
+#### 3.3 Record per i blocchi inline
+Il record per il blocchi inline (definiti da parentesi, begin end etc.) sono:
+- puntatore di catena dinamica
+- varibili locali
+- risultati intermedi
+
+I **risultati intermedi** possono essere necessari per memorizzare il risultato di alcuni calcoli senza che gli si venga assegnato un nome specifico. Ad esempio per il programma:
+```c
+{
+  int a = 3;
+  b = (a+x) / (x+y);
+}
+```
+i risultati di intermedi di `(a+x)` e `(x+y)`. La necessità di questo passaggio intermedio è strettamente legato al compilatore.
+
+Le **variabili locali** hanno solitamente dimensione fissa, tuttavia esistono dei casi in cui le non si conosce a priori la dimensione delle varibili (allocazione dinamca di array ad esempio). In questi casi il record prevede anche una parte di dimensione variabile che sarà definita in esecuzione.
+
+Il **puntatore di catena dinamica** serve per memorizzare il record precedente. E' necessario perché i record hanno spesso dimensioni differenti (e non sono conitgui (da verificare)).
+
+#### 3.4 Record delle procedure
+L'allocazione delle procedure è analogo a quello dei blocchi inline, leggermente più complesso in quanto è maggiore la quantità di dati da memorizzare. La struttura p la seguente:
+- Puntatore dì Catena Dinamica
+- Puntatore di Catena Statica
+- Indirizzo di Ritorno
+- Indirizzo del Risultato
+- Parametri
+- Variabili locali
+- Risultati Intermedi
+
+Per quanto riguarda **risultati intermedi, variabili locali, puntatore di catena dinamica**, non vi è alcuna differenza dall'allocazione dei blocchi inline. <br>
+Il **puntatore di catena statica** serve per gestire le informazioni necessarie a realizzare le regole di scope statico. <br>
+L'**indirizzo di ritorno** contiene l'indirizzo della prima istruzione da eseguire dopo che la chiamata di procedura/funzione attuale ha terminato l'esecuzione. <br>
+L'**indirizzo del risultato**, presente solo nel caso delle funzioni, contiene l'indirizzo della locazione di memoria nella quale il sottoprogramma deposita il valore restituito dalla funzione, quando questa termina. <br>
+I **parametri** sono i valori attuali usati nella chiamata della procedura o funzione.
+
+#### 3.5 Gestione della pila
+
+<img src="Images/gestionepila.png">
+
+Nella precedente immagine vediamo il funzionamento della pila. <br>
+*La pila cresce verso il basso.*
+
+Un puntatore esterno punta all'ultimo record *o frame* inserito nello stack. Questo puntatore viene anche chiamatp **frame pointer** o puntatore all'ambiente corrente. Esso corrisponde al Puntatore RdA (Record di Attivazione) nell'immagine.
+
+Vi è anche un altro puntatore nella foto. Si tratta del Puntatore al top della pila. Esso indica la prima posizione di memoria libera nella pila. Si tratta dello **stack pointer**. Tuttavia, questo puntatore può essere omesso se il frame pointer punta sempre ad una posizione di distanza prefissata dall'inizio della parte libera della pila.
+
+#### 3.6 Gestione della memoria dinamica tramite heap
+
+Nel caso in cui il linguaggio di programmazione preveda comandi espliciti per l'allocazione della memoria, lo stack non è più sufficiente. Si utilizza l'**heap**. Si tratta di una zona in memoria dove il programma può allocare e deallocare memoria arbitrariamente. In questo caso essendoci parecchia libertà non è possibile gestire la meoria in modalità LIFO.
+
+Esistono due tipi di blocchi allocabili:
+- quelli a dimensione fissa
+- quelli a dimensione variabile
+
+#### 3.7 Heap con blocchi a dimensione fissa
+
+In questo caso l'heap è suddiviso in blocchi o elementi di dimensione fissa collegati ad una lista. Si tratta, in pratica, di una lista di elementi "liberi", ovvero allocabili. Infatti, quando a runtime viene trovato ad esempio il comando `malloc`, il primo elemento della lista viene rimosso dalla lista e viene restituito il puntatore a tale elemento. Inoltre, viene aggiornato il puntatore al primo elemento libero, che verrà restituito in una successiva malloc.
+
+Quando una zona viene deallocata o liberata, quell'elemento ormai libero viene riaggiunto alla lista degli elementi liberi.
+
+Ovviamente, essendo questo tipo di memoria non prevedibile e non gestibile in LIFO, la lista di elementi liberi sarà scollegata andando avanti, assumendo una conformazione simile a quella delle linked list.
+
+#### 3.8 Heap con blocchi a dimensione variabile
+
+Nel caso in cui un linguaggio permetta l'allocazione dinamica di elementi a dimensione variabili, come gli *array* di dimensione variabile, non è più possibile utilizzare blocchi a dimensione fissa. Introduciamo i blochi variabili. In questo modo migliora la gestione della memoria, ma si rallenta l'esecuzione.
+
+Uno tra i principali problemi da evitare è quello della *frammentazione* della memoria. <br>
+La **frammentazione interna** si ha quando viene allocato un blocco strettamente maggiore del necessario. La porzione del blocco non utilizzata non sarà utilizzabile fino a che non verrà liberato l'intero blocco. <br>
+Tuttavia il problema più grande si ha con la **frammentazione esterna**, ovvero quando la somma della memoria libera nell'heap è più piccola di quella che viene richiesta dal programma. Per evitare quesot problema, nella maggior parte dei casi si tende a compattare la memoria libera, unendo i blocchi contigui. Questo processo rallenta molto l'esecuzione.
+
+Esistono due tecniche di gestione:
+
+##### Unica lista libera
