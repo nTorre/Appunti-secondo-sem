@@ -380,3 +380,27 @@ Tuttavia il problema più grande si ha con la **frammentazione esterna**, ovvero
 Esistono due tecniche di gestione:
 
 ##### Unica lista libera
+
+La prima tecnica di gestione dell'heap con blocchi a dimensione è quella di utilizzare un'unica lista, costituita da un blocco contenente l'intero heap. Ora ha, infatti, senso mantenere i blocchi della dimensione più grande possibile: non ha dunque senso suddividere la memoria in tanti piccoli blocchi come nel caso dei blocchi a dimensione fissa.
+
+Quando viene richiesta l'allocazione di un blocco di $n$ parole in memoria, le prime $n$ parole sono allocate e il puntatore all'inizio dell'heap avanza di $n$. Analogamente per le richieste di allocamento successive.
+
+Quando avviene una deallocazione, la memoria liberata viene collegata ad una lista libera, non utilizzabile direttamente da nuove allocazioni.
+
+Quando si raggiunge la fine dell'heap bisogna utilizzare lo spazio di memoria deallocato. Per farlo esistono due metodi:
+- Utilizzo diretto della lista libera: la lista libera di blocchi variabili viene mantenuta. Quando si necessita di un blocco di n parole, si ricerca nella lista di blocchi un blocco grande k>n. Se k-n è molto grande (maggiore di una soglia prefissata) si crea un nuovo blocco da inserire in lista. Altrimenti è ammissibile la frammentazione interna. <br> <br>
+Per la ricerca del blocco vi sono due politiche:
+  - *best fit*, ovvero ricerca del blocco dove k-n è inferiore possibile. Lento, ma buona gestione di memoria
+  - *first fit*, il primo blocco dove k>n. Più veloce, ma peggior gestione
+  - se la lista dei blocchi liberi è ordinata, le due modalità appena descritte coincidono.
+
+- Compattazione della memoria libera. Con questa tecnica, quando si raggiunge la fine dell'heap, tutti i blocchi allocati vengono spostati all'inizio dell'heap, lasciando la memoria libera in un unico blocco. A questo punto si aggiorna il puntatore all'heap. Questo metodo non è sempre attuabile, in quanto ci possono essere dei casi in cui i blocchi non sono spostabili.
+
+
+##### Liste libere multiple
+In questo metodo le liste sono più di una e ogni lista contiene blocchi della stessa dimensione. Quando viene richiesto un blocco di dimensione n, si cerca la lista contenente blocchi di dimensione $\geq$ n. Anche in questo caso le dimensioni dei blocchi possono essere statiche o dinamiche. Per quelle dinamiche abbiamo due metodi:
+  - buddy system: se viene richiesto un blocco di dimensione n, k è il più piccolo intero tale che $2^k \geq n$. Quindi si cerca nella lista dei blocchi $2^k$ un blocco libero. Se non trovato si cerca nella lista dei blocchi $2^{k+1}$ e si divide in due, uno viene allocato, l'altro inserito nella lista dei blocchi $2^k$. Se si dealloca la metà allocata, si cerca il suo compagno o buddy, ovvero l'altra metà "declassata". Se libera si riuniscono nel blocco $2^{n+1}$
+  - Fibonacci heap: funziona in maniera simile, ma invece che usare le potenze di due si usano le successioni di fibonacci come grandezza dei blocchi delle varie liste. Essendo che la successione di Fibonacci cresce più lentamente si ha meno frammentazione interna.
+
+
+#### 3.9 Implementazione delle regole di scope
