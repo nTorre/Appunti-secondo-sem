@@ -404,3 +404,46 @@ In questo metodo le liste sono più di una e ogni lista contiene blocchi della s
 
 
 #### 3.9 Implementazione delle regole di scope
+
+###### Scope statico
+Se si usa lo scope statico, l'ordine con cui esaminare i record per risolvere un riferimento non locale non è quello definito dagli stessi nella pila.
+
+Consideriamo il seguente codice:
+```c
+A: {
+  int y=O;
+
+  B:{
+    int x = O;
+    void pippo(int n){
+        X = n+l;
+        y = n+2;
+      }
+
+    C:{
+      int x = 1;
+      pippo(2);
+      write (x);
+    }
+  }
+  write (y);
+}
+```
+
+Una volta avvenuta la chiamata a `pippo()`, la situzione della pila dei record è la seguente:
+
+<img src="Images/scope_statico.png">
+
+Il primo record è quello più in alto, il blocco più esterno (A). La variabile non locale `x` usata nella procedura `pippo`, come sappiamo dallo scope statico non è quella descritta nel bocco C, bensì nel B. <br>
+Per poter reperire correttamente questa informazione a tempo di esecuzione, il record di attivazione della chiamata di procedura è collegato da un opportuno puntatore, detto *puntatore di catena statica* (disegnato tratteggiato). Il blocco B è a sua volta collegato ad A, essendo il primo blocco esterno è anche il primo da controllare per risolvere le dichiarazioni non locali.  
+
+###### Scope statico: il display
+La realizzazione dello scope statico mediante catena statica ha un inconveniente: se dobbiamo usare un nome non locale, dichiarato in un blocco esterno di k livelli rispetto al punto in cui ci troviamo, a tempo di esecuzione dobbiamo effettuare k accessi in memoria, necessari per scorrere la catena statica, per determinare il RdA che contiene la loca:rione di memoria per il nome che ci interessa. <br>
+Esiste una tecnica definita display per ridurre gli accessi a 2.
+
+Questa tecnica usa un vettore, detto *display*, contenente tanti elementi quanti sono i livelli di annidamento dei blocchi presenti nel programma, dove l'elemento k-esimo del vettore contiene il puntatore al RdA di livello di annidamento k correntemente attivo. Quando ci si riferisce ad un oggetto non locale, dichiarato in un blocco esterno di livello k, il RdA contenente tale oggetto può essere reperito semplicemente accedendo alla posizione k del vettore e seguendo il puntatore presente in tale posizione.
+
+*Nota: la parte sulle slides di kuper è comprensibile nel libro di testo. Per comprenderla consiglio di leggerla*
+
+###### Scope dinamico
+L'implementazione della regola di scope dinamico concettualmente è molto più semplice di quella dello scope statico. Infatti, visto che gli ambienti non locali si considerano nell'ordine con cui sono-attivati a run-time, per risolvere un riferimento non locale al nome x basterà, almeno in linea di principio, percorrere a ritroso la pila. partendo dal record di attivazione corrente, fino a trovare il RdA corrispondente al blocco nel quale il nome x è stato dichiarato.
